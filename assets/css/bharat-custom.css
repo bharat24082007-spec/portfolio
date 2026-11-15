@@ -329,3 +329,25 @@
     font-size: 16px !important;
     letter-spacing: 0.02em;
 }
+
+/* ------ Equal height for Education Cards (About Page) ------ */
+@media (min-width: 768px) {
+    .resume-area .row {
+        display: flex;
+        align-items: stretch;
+    }
+    .resume-area .col-xl-6,
+    .resume-area .col-md-6 {
+        display: flex;
+    }
+    .resume-area .resume-wrapper {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    .resume-area .resume-box {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+}
