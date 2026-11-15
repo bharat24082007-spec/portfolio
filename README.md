@@ -8,8 +8,6 @@ B.Tech student in Computer Science and Engineering (Cyber Security) at Narsimha 
 
 [**View Live Site**](https://bharat24082007-spec.github.io/portfolio/) · [LinkedIn](https://www.linkedin.com/in/bharat-charan-desineedi-0095b9228/) · [GitHub](https://github.com/bharat24082007-spec)
 
-![Portfolio preview](assets/preview.png)
-
 </div>
 
 ---
