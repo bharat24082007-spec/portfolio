@@ -228,35 +228,54 @@
 
 /* ------ Project card images ------ */
 .blog-post-box .blog-post-img {
-    background: #000000 !important;
+    background: transparent !important;
     border-radius: 14px;
     overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 340px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
     position: relative;
+    border: none !important;
 }
-.blog-post-box .blog-post-img a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.blog-post-box .blog-post-img > a {
+    display: block;
     width: 100%;
-    height: 100%;
-    background: #000000 !important;
+    background: transparent !important;
 }
 .blog-post-box .blog-post-img img {
     width: 100% !important;
     height: auto !important;
     max-height: 420px !important;
-    object-fit: contain !important;
+    object-fit: cover !important;
     display: block;
     border-radius: 10px;
     transition: transform 0.4s ease;
 }
 .blog-post-box .blog-post-img:hover img {
-    transform: scale(1.04);
+    transform: scale(1.03);
+}
+
+/* Category Badge inside Project card */
+.blog-post-box .blog-post-img .blog-post-category {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    background: rgba(0, 0, 0, 0.6) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 20px;
+    padding: 6px 14px;
+    z-index: 5;
+    pointer-events: none;
+}
+.blog-post-box .blog-post-img .blog-post-category a {
+    background: transparent !important;
+    display: inline-block !important;
+    width: auto !important;
+    height: auto !important;
+    color: #ffffff !important;
+    font-size: 0.75rem !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.05em !important;
+    text-transform: uppercase !important;
+    text-decoration: none !important;
 }
 
 /* ------ Events portfolio: show whole photo ------ */
