@@ -291,63 +291,8 @@
     line-height: 1.35 !important;
 }
 
-/* ------ Hero section layout & Name styling ------ */
-.main-hero-area {
-    padding-top: 130px !important;
-    padding-bottom: 50px !important;
-}
-
-.main-hero-area .hero-content h2 {
-    font-size: clamp(3.5rem, 9vw, 8.5rem) !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.05em !important;
-    line-height: 1.05 !important;
-    margin-bottom: 0.3rem !important;
-    text-align: center !important;
-}
-
-.main-hero-area .hero-content p {
-    font-size: 1.15rem !important;
-    letter-spacing: 0.04em !important;
-    margin-top: 0.3rem !important;
-    margin-bottom: 1.8rem !important;
-    text-align: center !important;
-}
-
-/* Left & Right column text alignment on large screens */
-@media (min-width: 992px) {
-    .main-hero-area .row.align-items-center .col-lg-3 .hero-content p {
-        text-align: left !important;
-    }
-    .main-hero-area .row.align-items-center .col-lg-3 .hero-content {
-        text-align: left !important;
-    }
-}
-
+/* ------ Hero section: ensure photo layers cleanly over background name ------ */
 .hero-image {
-    text-align: center !important;
-}
-
-.hero-image img {
-    margin-top: 0 !important;
-    max-width: 100%;
-}
-
-/* Reviews / Projects count left column */
-.clienti-reviews .reviews {
-    font-size: 2.2rem;
-    font-weight: 700;
-    line-height: 1.2;
-}
-.clienti-reviews .reviews span {
-    display: block;
-    font-size: 1rem;
-    font-weight: 400;
-    margin-top: 4px;
-}
-.clienti-reviews .reviews p {
-    font-size: 0.92rem !important;
-    line-height: 1.5 !important;
-    margin-top: 10px !important;
-    margin-bottom: 0 !important;
+    position: relative;
+    z-index: 2;
 }
