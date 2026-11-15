@@ -290,3 +290,12 @@
     letter-spacing: normal !important;
     line-height: 1.35 !important;
 }
+
+/* ------ Hero image alignment (without background text) ------ */
+.main-hero-area {
+    padding-top: 140px !important;
+    padding-bottom: 50px !important;
+}
+.hero-image img {
+    margin-top: 0 !important;
+}
