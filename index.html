@@ -637,13 +637,14 @@
                 <!-- START CONTACT FORM DESIGN AREA -->
                 <div class="col-lg-8">
                     <div class="contact-form contact-form-area wow fadeInUp delay-0-4s">
-                        <!-- TODO: Switch to Formspree or similar service for a working contact form on GitHub Pages -->
-                        <form id="contactForm" class="contact-form" action="mailto:bharat24082007@gmail.com" method="post" enctype="text/plain">
+                        <form id="contactForm" class="contact-form" action="https://api.web3forms.com/submit" method="POST">
+                            <input type="hidden" name="access_key" value="77a383a5-5de9-4a41-9b96-8f8ad11dd1f0">
+                            <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="name">Full Name</label>
-                                        <input type="text" id="name" class="form-control" value="" placeholder="Your Name" required="" data-error="Please enter your Name" />
+                                        <input type="text" id="name" name="name" class="form-control" value="" placeholder="Your Name" required="" data-error="Please enter your Name" />
                                         <label for="name" class="for-icon"><i class="far fa-user"></i></label>
                                         <div class="help-block with-errors"></div>
                                     </div>
@@ -651,7 +652,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="email">Email Address</label>
-                                        <input type="email" id="email" class="form-control" value="" placeholder="your@email.com" required="" data-error="Please enter your Email" />
+                                        <input type="email" id="email" name="email" class="form-control" value="" placeholder="your@email.com" required="" data-error="Please enter your Email" />
                                         <label for="email" class="for-icon"><i class="far fa-envelope"></i></label>
                                         <div class="help-block with-errors"></div>
                                     </div>
@@ -659,7 +660,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="subject">Subject</label>
-                                        <input type="text" id="subject" class="form-control" value="" placeholder="Your Subject" required="" data-error="Please enter a Subject" />
+                                        <input type="text" id="subject" name="subject" class="form-control" value="" placeholder="Your Subject" required="" data-error="Please enter a Subject" />
                                         <label for="subject" class="for-icon"><i class="far fa-user"></i></label>
                                         <div class="help-block with-errors"></div>
                                     </div>
@@ -680,8 +681,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-12 text-center">
-                                    <p class="input-success">Your default email client will open with the message pre-filled.</p>
-                                    <p class="input-error">Sorry, Message could not send! Please try again.</p>
+                                    <p class="direct-email-backup" style="margin-top: 15px; margin-bottom: 0; font-size: 14px; opacity: 0.85;">or email me directly at <a href="mailto:bharat24082007@gmail.com" style="text-decoration: underline; color: inherit;">bharat24082007@gmail.com</a></p>
                                 </div>
                             </div>
                         </form>
@@ -736,6 +736,10 @@
     <script src="assets/js/wow.min.js"></script>
     <!-- SCRIPT JS-->
     <script src="assets/js/script.js"></script>
+    <!-- FORM VALIDATOR JS -->
+    <script src="assets/js/form-validator.min.js"></script>
+    <!-- CONTACT FORM JS -->
+    <script src="assets/js/contact-form-script.js"></script>
 </body>
 
 </html>

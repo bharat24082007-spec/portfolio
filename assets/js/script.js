@@ -287,34 +287,7 @@ Version      : 1.0
 
 
 
-    /*
-     * ----------------------------------------------------------------------------------------
-     *  MAILTO CONTACT FORM (GitHub Pages cannot run PHP)
-     *  TODO: Switch to Formspree or similar for a proper contact form
-     * ----------------------------------------------------------------------------------------
-     */
-    $("#contactForm").on('submit', function(e) {
-        e.preventDefault();
-        var name = $("#name").val();
-        var email = $("#email").val();
-        var subject = $("#subject").val();
-        var message = $("#message").val();
 
-        if (name.length > 1 && email.length > 1 && subject.length > 1 && message.length > 1) {
-            var body = "Name: " + name + "\nEmail: " + email + "\n\n" + message;
-            var mailto = "mailto:bharat24082007@gmail.com"
-                + "?subject=" + encodeURIComponent(subject)
-                + "&body=" + encodeURIComponent(body);
-            window.location.href = mailto;
-            $('#contactForm .input-success').delay(500).fadeIn(1000);
-            $('#contactForm .input-error').fadeOut(500);
-        } else {
-            $('#contactForm .input-error').delay(500).fadeIn(1000);
-            $('#contactForm .input-success').fadeOut(500);
-        }
-
-        return false;
-    });
 
     /*
      * ----------------------------------------------------------------------------------------

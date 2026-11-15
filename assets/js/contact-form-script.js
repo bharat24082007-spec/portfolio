@@ -1,62 +1,97 @@
 /*==============================================================*/
-// Klev Contact Form  JS
+// Contact Form JS with Web3Forms AJAX
 /*==============================================================*/
 (function ($) {
-    "use strict"; // Start of use strict
-    $("#contactForm").validator().on("submit", function (event) {
-        if (event.isDefaultPrevented()) {
-            // handle the invalid form...
-            formError();
-            submitMSG(false, "Did you fill in the form properly?");
-        } else {
-            // everything looks good!
-            event.preventDefault();
-            submitForm();
-        }
-    });
+    "use strict";
 
+    var $form = $("#contactForm");
+    if (!$form.length) return;
 
-    function submitForm(){
-        // Initiate Variables With Form Content
-        var name = $("#name").val();
-        var email = $("#email").val();
-        var phone_number = $("#phone_number").val();
-        var subject = $("#subject").val();
-        var message = $("#message").val();
-
-
-        $.ajax({
-            type: "POST",
-            url: "assets/php/form-process.php",
-            data: "name=" + name + "&email=" + email + "&phone_number=" + phone_number + "&subject=" + subject + "&message=" + message,
-            success : function(text){
-                if (text == "success"){
-                    formSuccess();
-                } else {
-                    formError();
-                    submitMSG(false,text);
-                }
+    // Attach submit listener
+    if ($.fn.validator) {
+        $form.validator().on("submit", function (event) {
+            if (event.isDefaultPrevented()) {
+                formError();
+                submitMSG(false, "Please fill in all required fields properly.");
+            } else {
+                event.preventDefault();
+                submitForm();
             }
         });
-    }
-
-    function formSuccess(){
-        $("#contactForm")[0].reset();
-        submitMSG(true, "Message Submitted!")
-    }
-
-    function formError(){
-        $("#contactForm").removeClass().addClass('shake animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
-            $(this).removeClass();
+    } else {
+        $form.on("submit", function (event) {
+            event.preventDefault();
+            submitForm();
         });
     }
 
-    function submitMSG(valid, msg){
-        if(valid){
-            var msgClasses = "h4 text-left tada animated text-success";
-        } else {
-            var msgClasses = "h4 text-left text-danger";
+    function submitForm() {
+        var formElement = $form[0];
+        var formData = new FormData(formElement);
+
+        // Ensure access_key is always included
+        if (!formData.get("access_key")) {
+            formData.append("access_key", "77a383a5-5de9-4a41-9b96-8f8ad11dd1f0");
         }
-        $("#msgSubmit").removeClass().addClass(msgClasses).text(msg);
+
+        var $submitBtn = $form.find('button[type="submit"]');
+        var originalBtnContent = $submitBtn.html();
+
+        // Disable button while sending to prevent double submits
+        $submitBtn.prop("disabled", true).addClass("disabled").html('Sending... <i class="ri-loader-4-line"></i>');
+        submitMSG(false, "");
+
+        fetch("https://api.web3forms.com/submit", {
+            method: "POST",
+            body: formData
+        })
+        .then(function (response) {
+            return response.json().then(function (data) {
+                return { ok: response.ok, status: response.status, data: data };
+            });
+        })
+        .then(function (res) {
+            if (res.ok && res.data && res.data.success) {
+                formSuccess();
+                submitMSG(true, "Thanks, your message has been sent");
+            } else {
+                formError();
+                var errorMsg = (res.data && res.data.message) ? res.data.message : "Sorry, Message could not send! Please try again.";
+                submitMSG(false, errorMsg);
+            }
+        })
+        .catch(function (error) {
+            formError();
+            submitMSG(false, "Sorry, Message could not send! Please try again.");
+        })
+        .finally(function () {
+            // Re-enable Send button
+            $submitBtn.prop("disabled", false).removeClass("disabled").html(originalBtnContent);
+        });
     }
-}(jQuery)); // End of use strict
+
+    function formSuccess() {
+        $form[0].reset();
+        if ($form.data('bs.validator')) {
+            $form.data('bs.validator').reset();
+        }
+        $form.find(".has-error").removeClass("has-error");
+        $form.find(".help-block.with-errors").empty();
+    }
+
+    function formError() {
+        $form.removeClass('shake animated').addClass('shake animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+            $(this).removeClass('shake animated');
+        });
+    }
+
+    function submitMSG(valid, msg) {
+        var $msgSubmit = $("#msgSubmit");
+        if (!msg) {
+            $msgSubmit.addClass("hidden d-none").hide().text("");
+            return;
+        }
+        var msgClasses = valid ? "h4 text-success tada animated" : "h4 text-danger";
+        $msgSubmit.removeClass("hidden d-none").show().removeClass("text-success text-danger tada animated").addClass(msgClasses).text(msg);
+    }
+}(jQuery));
