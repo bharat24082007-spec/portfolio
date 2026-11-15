@@ -4,94 +4,72 @@
 (function ($) {
     "use strict";
 
-    var $form = $("#contactForm");
-    if (!$form.length) return;
-
-    // Attach submit listener
-    if ($.fn.validator) {
-        $form.validator().on("submit", function (event) {
-            if (event.isDefaultPrevented()) {
-                formError();
-                submitMSG(false, "Please fill in all required fields properly.");
-            } else {
-                event.preventDefault();
-                submitForm();
-            }
-        });
-    } else {
-        $form.on("submit", function (event) {
-            event.preventDefault();
-            submitForm();
-        });
-    }
-
-    function submitForm() {
-        var formElement = $form[0];
-        var formData = new FormData(formElement);
-
-        // Ensure access_key is always included
-        if (!formData.get("access_key")) {
-            formData.append("access_key", "77a383a5-5de9-4a41-9b96-8f8ad11dd1f0");
-        }
-
-        var $submitBtn = $form.find('button[type="submit"]');
-        var originalBtnContent = $submitBtn.html();
-
-        // Disable button while sending to prevent double submits
-        $submitBtn.prop("disabled", true).addClass("disabled").html('Sending... <i class="ri-loader-4-line"></i>');
-        submitMSG(false, "");
-
-        fetch("https://api.web3forms.com/submit", {
-            method: "POST",
-            body: formData
-        })
-        .then(function (response) {
-            return response.json().then(function (data) {
-                return { ok: response.ok, status: response.status, data: data };
-            });
-        })
-        .then(function (res) {
-            if (res.ok && res.data && res.data.success) {
-                formSuccess();
-                submitMSG(true, "Thanks, your message has been sent");
-            } else {
-                formError();
-                var errorMsg = (res.data && res.data.message) ? res.data.message : "Sorry, Message could not send! Please try again.";
-                submitMSG(false, errorMsg);
-            }
-        })
-        .catch(function (error) {
-            formError();
-            submitMSG(false, "Sorry, Message could not send! Please try again.");
-        })
-        .finally(function () {
-            // Re-enable Send button
-            $submitBtn.prop("disabled", false).removeClass("disabled").html(originalBtnContent);
-        });
-    }
-
-    function formSuccess() {
-        $form[0].reset();
-        if ($form.data('bs.validator')) {
-            $form.data('bs.validator').reset();
-        }
-        $form.find(".has-error").removeClass("has-error");
-        $form.find(".help-block.with-errors").empty();
-    }
-
-    function formError() {
-        $form.removeClass('shake animated').addClass('shake animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
-            $(this).removeClass('shake animated');
-        });
-    }
-
-    function submitMSG(valid, msg) {
+    $(function () {
+        var $form = $("#contactForm");
         var $msgSubmit = $("#msgSubmit");
-        if (!msg) {
-            $msgSubmit.addClass("hidden d-none").hide().text("");
-            return;
+
+        if (!$form.length) return;
+
+        // Hide message on page load so it never shows by default
+        hideMessage();
+
+        function hideMessage() {
+            $msgSubmit.hide().empty().removeClass("text-success text-danger");
         }
-        var msgClasses = valid ? "h4 text-success tada animated" : "h4 text-danger";
-        $msgSubmit.removeClass("hidden d-none").show().removeClass("text-success text-danger tada animated").addClass(msgClasses).text(msg);
-    }
+
+        function showMessage(isSuccess, text) {
+            $msgSubmit.removeClass("text-success text-danger")
+                      .addClass(isSuccess ? "h4 text-success" : "h4 text-danger")
+                      .text(text)
+                      .fadeIn(200);
+        }
+
+        // Single submit handler
+        $form.off("submit").on("submit", async function (event) {
+            event.preventDefault();
+
+            // Hide the error message at the start of every submit
+            hideMessage();
+
+            var formElement = $form[0];
+            var formData = new FormData(formElement);
+
+            // Ensure access_key is included in FormData
+            if (!formData.get("access_key")) {
+                formData.append("access_key", "77a383a5-5de9-4a41-9b96-8f8ad11dd1f0");
+            }
+
+            var $submitBtn = $form.find('button[type="submit"]');
+            var originalBtnHtml = $submitBtn.html();
+
+            // Disable Send button while sending to stop double submits
+            $submitBtn.prop("disabled", true).addClass("disabled").html('Sending... <i class="ri-loader-4-line"></i>');
+
+            try {
+                var response = await fetch("https://api.web3forms.com/submit", {
+                    method: "POST",
+                    body: formData
+                });
+
+                var data = await response.json();
+
+                // console.log the full response object on every submit
+                console.log("Web3Forms response:", data);
+
+                if (data && data.success === true) {
+                    formElement.reset();
+                    showMessage(true, "Thanks, your message has been sent");
+                } else {
+                    var errorMsg = (data && data.message) ? data.message : "Sorry, Message could not send! Please try again.";
+                    showMessage(false, errorMsg);
+                }
+            } catch (error) {
+                console.error("Submission error:", error);
+                showMessage(false, "Sorry, Message could not send! Please try again.");
+            } finally {
+                // Re-enable Send button in finally block
+                $submitBtn.prop("disabled", false).removeClass("disabled").html(originalBtnHtml);
+            }
+        });
+    });
 }(jQuery));

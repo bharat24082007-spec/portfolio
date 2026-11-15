@@ -363,3 +363,17 @@
     font-weight: 600 !important;
     letter-spacing: 0.5px;
 }
+
+/* Contact form status message */
+#msgSubmit {
+    margin-top: 15px;
+    font-size: 16px;
+    font-weight: 500;
+}
+#msgSubmit.text-success {
+    color: #198754 !important;
+}
+#msgSubmit.text-danger {
+    color: #dc3545 !important;
+}
+
